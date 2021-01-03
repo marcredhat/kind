@@ -278,7 +278,9 @@ test   Bound    pvc-6397a3e4-e4e6-47d9-bb42-12ff1873fcb8   2Gi        RWO       
 https://www.openshift.com/blog/self-hosted-load-balancer-for-openshift-an-operator-based-approach
 https://blog.oddbit.com/post/2020-09-27-installing-metallb-on-openshif/
 
-
+https://github.com/redhat-cop/keepalived-operator
+https://github.com/redhat-cop/keepalived-operator/blob/master/Ingress-how-to.md
+https://github.com/kubernetes-sigs/external-dns
 
 
 ## Troubleshooting
