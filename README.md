@@ -321,6 +321,11 @@ You can use external DNS for this.
 
 ## External DNS
 
+https://github.com/kubernetes-sigs/external-dns supports Google Cloud DNS, Amazon Route 53, AzureDNS, Cloudflare,  CoreDNS etc
+
+**Note:** CoreDNS can provide external name resolution.
+
+
 https://github.com/kubernetes-sigs/external-dns
 
 https://access.redhat.com/solutions/4890351
