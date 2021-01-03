@@ -233,6 +233,25 @@ Version: 1.0.0
 Hostname: nginx-web-7675865c58-8kf2n
 ```
 
+## Storage
+
+See https://mauilion.dev/posts/kind-pvc/
+
+```text
+Use Cases
+Assuming we are using a local kind cluster.
+
+default storage class: I want there to be a built in storage class so that I can deploy applications that request persistent volume claims.
+
+pod restart: If my pod restarts I want that pod to be scheduled such that the persistent volume claim is available to my pod. This ensures that if I have to restart and my pod will always come back with access to the same data.
+
+restore volumes: I want to be able to bring up a kind cluster and regain access to a previously provisioned persistent volume claim.
+
+volume mobility: I want to be able to schedule my pod to multiple nodes and have it access the same persistent volume claim. This requires that the peristent volume be made available to all nodes.
+```
+
+
+
 ## Troubleshooting
 
  https://kubernetes.github.io/ingress-nginx/troubleshooting/
