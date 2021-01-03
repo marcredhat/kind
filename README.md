@@ -112,7 +112,36 @@ serviceaccount/calico-kube-controllers created
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.28.0/deploy/static/mandatory.yaml
+```
+
+Expected result:
+
+```text
+namespace/ingress-nginx created
+configmap/nginx-configuration created
+configmap/tcp-services created
+configmap/udp-services created
+serviceaccount/nginx-ingress-serviceaccount created
+Warning: rbac.authorization.k8s.io/v1beta1 ClusterRole is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRole
+clusterrole.rbac.authorization.k8s.io/nginx-ingress-clusterrole created
+Warning: rbac.authorization.k8s.io/v1beta1 Role is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 Role
+role.rbac.authorization.k8s.io/nginx-ingress-role created
+Warning: rbac.authorization.k8s.io/v1beta1 RoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 RoleBinding
+rolebinding.rbac.authorization.k8s.io/nginx-ingress-role-nisa-binding created
+Warning: rbac.authorization.k8s.io/v1beta1 ClusterRoleBinding is deprecated in v1.17+, unavailable in v1.22+; use rbac.authorization.k8s.io/v1 ClusterRoleBinding
+clusterrolebinding.rbac.authorization.k8s.io/nginx-ingress-clusterrole-nisa-binding created
+deployment.apps/nginx-ingress-controller created
+limitrange/ingress-nginx created
+```
+
+```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.0/deploy/static/provider/baremetal/service-nodeport.yaml
+```
+
+Expected result:
+
+```text
+service/ingress-nginx created
 ```
 
 
@@ -122,16 +151,30 @@ Patch NGINX for to forward 80 and 443
 kubectl patch deployments -n ingress-nginx nginx-ingress-controller -p '{"spec":{"template":{"spec":{"containers":[{"name":"nginx-ingress-controller","ports":[{"containerPort":80,"hostPort":80},{"containerPort":443,"hostPort":443}]}]}}}}'
 ```
 
-Find IP address of Docker Host
+Expected result:
+
+```text
+deployment.apps/nginx-ingress-controller patched
+```
+
+
 
 ```bash
-hostip=$(hostname  -I | cut -f1 -d' ')
-echo -e "Your Kind Cluster Information: \n"
-echo -e "Ingress Domain: $hostip.nip.io \n"
-echo -e "Ingress rules will need to use the IP address of your Linux Host in the Domain name \n"
-echo -e "Example:  You have a web server you want to expose using a host called webserver1."
-echo -e "          Your ingress rule would use the hostname: webserver1.$hostip.nip.io"
-echo -e "******************************************************************************************************************* \n"
+chmod +x ./showenv.sh
+./showenv.sh
+```
+
+Expected result:
+
+```text
+Your Kind Cluster Information:
+
+Ingress Domain: 10.0.2.15.nip.io
+
+Ingress rules will need to use the IP address of your Linux Host in the Domain name
+
+Example:  You have a web server you want to expose using a host called webserver1.
+          Your ingress rule would use the hostname: webserver1.10.0.2.15.nip.io
 ```
 
 ```bash
