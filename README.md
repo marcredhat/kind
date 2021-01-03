@@ -182,6 +182,14 @@ Example:  You have a web server you want to expose using a host called webserver
 kubectl cluster-info --context kind-marcccluster01
 ```
 
+Expected result:
+
+```text
+Kubernetes control plane is running at https://10.0.2.15:6443
+KubeDNS is running at https://10.0.2.15:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+```
+
+
 ```bash
 oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/deploy.yaml
 ```
