@@ -232,3 +232,7 @@ Hello, world!
 Version: 1.0.0
 Hostname: nginx-web-7675865c58-8kf2n
 ```
+
+## Troubleshooting
+
+ https://kubernetes.github.io/ingress-nginx/troubleshooting/
