@@ -36,9 +36,17 @@ OS/Arch:      linux/amd64
 kind delete clusters marccluster01
 ```
 
+Expected result:
 ```text
 enabling experimental podman provider
 Deleted clusters: ["marccluster01"]
+```
+
+
+```
+Use
+podman container rm 
+to remove any old kind workers and control-planes
 ```
 
 ```bash
