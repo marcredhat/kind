@@ -177,6 +177,11 @@ Example:  You have a web server you want to expose using a host called webserver
           Your ingress rule would use the hostname: webserver1.10.0.2.15.nip.io
 ```
 
+
+```bash
+kubectl cluster-info --context kind-marcccluster01
+```
+
 ```bash
 oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/deploy.yaml
 ```
