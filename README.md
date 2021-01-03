@@ -273,6 +273,14 @@ NAME   STATUS   VOLUME                                     CAPACITY   ACCESS MOD
 test   Bound    pvc-6397a3e4-e4e6-47d9-bb42-12ff1873fcb8   2Gi        RWO            standard       13s
 ```
 
+## Layer 4 load balancing with MetalLB
+
+https://www.openshift.com/blog/self-hosted-load-balancer-for-openshift-an-operator-based-approach
+https://blog.oddbit.com/post/2020-09-27-installing-metallb-on-openshif/
+
+
+
+
 ## Troubleshooting
 
  https://kubernetes.github.io/ingress-nginx/troubleshooting/
