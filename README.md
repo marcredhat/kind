@@ -58,16 +58,88 @@ cd kind
 kind create cluster --name marcccluster01 --config cluster01-kind.yaml
 ```
 
+Expected result:
+
+```text
+enabling experimental podman provider
+Creating cluster "marcccluster01" ...
+ ✓ Ensuring node image (kindest/node:v1.19.1) 🖼
+ ✓ Preparing nodes 📦 📦
+ ✓ Writing configuration 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing StorageClass 💾
+ ✓ Joining worker nodes 🚜
+Set kubectl context to "kind-marcccluster01"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-marcccluster01
+
+Thanks for using kind! 😊
+```
+
 ```bash
 kubectl apply -f calico.yaml
+```
+
+Expected result:
+
+```text
+configmap/calico-config created
+Warning: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+customresourcedefinition.apiextensions.k8s.io/felixconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamblocks.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamhandles.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamconfigs.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/bgppeers.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/bgpconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ippools.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/hostendpoints.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/clusterinformations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworkpolicies.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworksets.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/networkpolicies.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/networksets.crd.projectcalico.org created
+clusterrole.rbac.authorization.k8s.io/calico-kube-controllers created
+clusterrolebinding.rbac.authorization.k8s.io/calico-kube-controllers created
+clusterrole.rbac.authorization.k8s.io/calico-node created
+clusterrolebinding.rbac.authorization.k8s.io/calico-node created
+daemonset.apps/calico-node created
+serviceaccount/calico-node created
+deployment.apps/calico-kube-controllers created
+serviceaccount/calico-kube-controllers created
 ```
 
 ```bash
 oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/deploy.yaml
 ```
 
+
+Expected result:
+
+```text
+deployment.apps/nginx-web created
+```
+
+
 ```bash
 oc expose deploy nginx-web --port 8080 --target-port 8080
+```
+
+Expected result:
+
+```text
+service/nginx-web exposed
+```
+
+```bash
+oc apply -f nginx-ingress.yaml
+```
+
+Expected result:
+
+```text
+ingress.networking.k8s.io/minimal-ingress created
 ```
 
 ```bash 
