@@ -30,6 +30,11 @@ Built:        Wed Sep 23 09:18:02 2020
 OS/Arch:      linux/amd64
 ```
 
+```bash
+dnf -y install jq
+Package jq-1.5-12.el8.x86_64 is already installed.
+```
+
 ## Cleanup 
 
 ```bash
@@ -294,9 +299,24 @@ https://github.com/redhat-cop/keepalived-operator
 https://github.com/redhat-cop/keepalived-operator/blob/master/Ingress-how-to.md
 
 
+```text
+Using MetalLB, you can deploy any application that can be containerized. 
+
+MetalLB uses IP pools that dynamically assign an IP address for the service. 
+
+MetalLB does not provide name resolution for the service IPs.
+
+You can use external DNS for this.
+```
+
+## External DNS
+
 https://github.com/kubernetes-sigs/external-dns
+
+https://access.redhat.com/solutions/4890351
 
 
 ## Troubleshooting
 
  https://kubernetes.github.io/ingress-nginx/troubleshooting/
+
