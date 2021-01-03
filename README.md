@@ -251,6 +251,27 @@ volume mobility: I want to be able to schedule my pod to multiple nodes and have
 ```
 
 
+```bash
+oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/pvc-test.yaml
+```
+
+Expected result:
+
+```text
+oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/pvc-test.yaml
+deployment.apps/test created
+persistentvolumeclaim/test created
+
+
+oc get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM          STORAGECLASS   REASON   AGE
+pvc-6397a3e4-e4e6-47d9-bb42-12ff1873fcb8   2Gi        RWO            Delete           Bound    default/test   standard                6s
+
+
+oc get pvc
+NAME   STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+test   Bound    pvc-6397a3e4-e4e6-47d9-bb42-12ff1873fcb8   2Gi        RWO            standard       13s
+```
 
 ## Troubleshooting
 
