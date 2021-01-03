@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: name
+        image: nginx
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: volume
+          mountPath: /pvc/
+      volumes: 
+      - name: volume
+        persistentVolumeClaim:
+          claimName: test
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test
+  labels:
+    # insert any desired labels to identify your claim
+    app: test
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # The amount of the volume's storage to request
+      storage: 2Gi
