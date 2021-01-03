@@ -1,1 +1,18 @@
-
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  #annotations:
+  # nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: web.10.0.2.15.nip.io
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-web
+            port:
+              number: 8080
