@@ -281,6 +281,16 @@ test   Bound    pvc-6397a3e4-e4e6-47d9-bb42-12ff1873fcb8   2Gi        RWO       
 
 ## Layer 4 load balancing with MetalLB
 
+```text
+Out of the box, OpenShift (4.x) on bare metal doesn’t come with any integrated load balancer support.
+So we will use MetalLB.
+```
+
+```text
+To have a single load-balanced IP use multiple protocols, you need to create a service for each protocol.
+Each of the services will need the metallb.universe.tf/allow-shared-ip annotation.
+```
+
 
 ```text
 Operator that watches for the creation of services of type LoadBalancer and provides 
