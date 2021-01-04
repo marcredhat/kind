@@ -40,6 +40,7 @@ Package jq-1.5-12.el8.x86_64 is already installed.
 sudo yum -y install docker-ce --allowerasing
 sudo systemctl enable --now docker
 sudo rm -rf /var/lib/docker.bk
+systemctl daemon-reload
 sudo systemctl start  docker
 ```
 
