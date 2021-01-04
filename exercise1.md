@@ -1,5 +1,5 @@
 
-#StatefulSet
+# StatefulSet
 
 ```bash
 #git clone https://github.com/marcredhat/kubernetes-examples.git
