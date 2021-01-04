@@ -49,6 +49,8 @@ sudo systemctl start  docker
 
 ```bash
 kind delete clusters marccluster01
+docker stop    $(docker container ls)
+docker rmi --force  $(docker images -a -q)
 ```
 
 Expected result:
