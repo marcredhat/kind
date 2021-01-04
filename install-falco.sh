@@ -1,6 +1,6 @@
 #!/bin/bash
 dnf -y install make
-podman pull falcosecurity/driverkit-builder
+docker pull falcosecurity/driverkit-builder
 
 GO111MODULE="on" go get github.com/falcosecurity/driverkit
 
@@ -8,9 +8,9 @@ kernelversion=$(uname -v | cut -f1 -d'-' | cut -f2 -d'#')
 kernelrelease=$(uname -r)
 
 
-#git clone https://github.com/falcosecurity/driverkit.git
-#cd driverkit/
-#mv /root/go/bin/driverkit /usr/bin
+git clone https://github.com/falcosecurity/driverkit.git
+cd driverkit/
+mv /root/go/bin/driverkit /usr/bin
 
 #https://computingforgeeks.com/install-docker-and-docker-compose-on-rhel-8-centos-8/
 
