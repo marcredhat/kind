@@ -1,10 +1,17 @@
 
+```bash
 kubectl get secret $(kubectl get sa default -n default -o json | jq -r '.secrets[0].name') -o json | jq -r '.data.token' | base64 -d
 
 export KUBE_AZ=$(kubectl get secret $(kubectl get sa default -n default -o json | jq -r '.secrets[0].name') -o json | jq -r '.data.token' | base64 -d) 
+```
 
+```bash
 curl  -H "Authorization: Bearer $KUBE_AZ" --insecure https://10.0.2.15:6443/api
+```
 
+Expected result:
+
+```text
 {
   "kind": "APIVersions",
   "versions": [
@@ -16,6 +23,6 @@ curl  -H "Authorization: Bearer $KUBE_AZ" --insecure https://10.0.2.15:6443/api
       "serverAddress": "10.88.0.26:6443"
     }
   ]
-
+```
 
 
