@@ -15,17 +15,17 @@ mv /root/go/bin/driverkit /usr/bin
 #https://computingforgeeks.com/install-docker-and-docker-compose-on-rhel-8-centos-8/
 
 
-#sudo yum install -y yum-utils
-#sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-#sudo yum  makecache
-#sudo yum -y install docker-ce --allowerasing
-#sudo systemctl enable --now docker
-#sudo systemctl start  docker
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum  makecache
+sudo yum -y install docker-ce --allowerasing
+sudo systemctl enable --now docker
+sudo systemctl start  docker
 
 
-#driverkit docker --output-module /tmp/falco.ko --kernelversion=$kernelversion --kernelrelease=$kernelrelease --driverversion=dev --target=centos
+driverkit docker --output-module /tmp/falco.ko --kernelversion=$kernelversion --kernelrelease=$kernelrelease --driverversion=dev --target=centos
 
-#sudo dnf -y install podman --allowerasing
+sudo dnf -y install podman --allowerasing
 
 sudo cp /tmp/falco.ko /lib/modules/$kernelrelease/falco.ko
 sudo depmod
