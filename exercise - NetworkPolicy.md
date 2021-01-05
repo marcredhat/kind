@@ -124,6 +124,42 @@ kubectl exec -ti $CUSTOMER_POD -n yaobank -c customer -- /bin/bash
 root@customer-68d67b588d-dk5p7:/app# dig www.google.com
 ```
 
+## Allow DNS 
+
+```bash
+cat ./globalnetpolicy2.yaml
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: default-app-policy
+spec:
+  #namespaceSelector: has(projectcalico.org/name)
+  namespaceSelector: projectcalico.org/name not in {"kube-system", "kube-node-lease", "calico-system", "kube-public","local-path-storage"}
+  types:
+  - Ingress
+  - Egress
+  egress:
+    - action: Allow
+      protocol: UDP
+      destination:
+        selector: k8s-app == "kube-dns"
+        ports:
+          - 53
+```
+
+Above, we used selector: "k8s-app=kube-dns" as  this is the label for coredns pods:
+
+```bash
+oc get pods -n kube-system --show-labels | grep coredns
+coredns-f9fd979d6-7h55h                                1/1     Running   0          4h29m   k8s-app=kube-dns,pod-template-hash=f9fd979d6
+coredns-f9fd979d6-klmrq                                1/1     Running   0          4h29m   k8s-app=kube-dns,pod-template-hash=f9fd979d6
+```
+
+
+```bash
+calicoctl apply -f globalnetpolicy2.yaml
+Successfully applied 1 'GlobalNetworkPolicy' resource(s)
+```
 
 
 
