@@ -7,3 +7,7 @@ spec:
   types:
   - Ingress
   - Egress
+  ingress:
+  - action: Deny
+  egress:
+  - action: Deny
