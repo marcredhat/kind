@@ -3,11 +3,9 @@ kind: GlobalNetworkPolicy
 metadata:
   name: default-app-policy
 spec:
-  namespaceSelector: has(projectcalico.org/name) && projectcalico.org/name not in {"kube-system", "kube-node-lease", "calico-system", "kube-public","local-path-storage"}
+  #namespaceSelector: has(projectcalico.org/name)
+  namespaceSelector: projectcalico.org/name not in {"kube-system", "kube-node-lease", "calico-system", "kube-public","local-path-storage"}
   types:
   - Ingress
   - Egress
-  ingress:
-  - action: Deny
-  egress:
-  - action: Deny
+  
