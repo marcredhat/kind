@@ -86,6 +86,19 @@ compared to any Calico network policy which does specify an order, or
 Kubernetes network policies which have an implicit order of 1000. 
 ```
 
+
+Let's label our namespaces:
+
+```bash
+  kubectl label namespace default projectcalico.org/name=default 
+  kubectl label namespace kube-node-lease projectcalico.org/name=kube-node-lease
+  kubectl label namespace kube-public projectcalico.org/name=kube-public
+  kubectl label namespace kube-system  projectcalico.org/name=kube-system  
+  kubectl label namespace local-path-storage projectcalico.org/name=local-path-storage
+  kubectl label namespace yaobank projectcalico.org/name=yaobank 
+```
+
+
 ```yaml
 apiVersion: projectcalico.org/v3
 kind: GlobalNetworkPolicy
@@ -133,8 +146,7 @@ kind: GlobalNetworkPolicy
 metadata:
   name: default-app-policy
 spec:
-  #namespaceSelector: has(projectcalico.org/name)
-  namespaceSelector: projectcalico.org/name not in {"kube-system", "kube-node-lease", "calico-system", "kube-public","local-path-storage"}
+  namespaceSelector: has(projectcalico.org/name) && projectcalico.org/name not in { "kube-node-lease", "calico-system", "kube-public","local-path-storage"}
   types:
   - Ingress
   - Egress
@@ -157,8 +169,16 @@ coredns-f9fd979d6-klmrq                                1/1     Running   0      
 
 
 ```bash
-calicoctl apply -f globalnetpolicy2.yaml
+calicoctl delete -f globalnetpolicy1.yaml
+calicoctl apply -f  globalnetpolicy2.yaml
 Successfully applied 1 'GlobalNetworkPolicy' resource(s)
+```
+
+Check DNS access from the customer pod:
+
+```bash
+kubectl exec -ti $CUSTOMER_POD -n yaobank -c customer -- /bin/bash
+root@customer-68d67b588d-dk5p7:/app# dig www.google.com
 ```
 
 
