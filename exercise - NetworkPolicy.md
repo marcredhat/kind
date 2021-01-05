@@ -72,20 +72,58 @@ local-path-storage   Active   3h50m
 yaobank              Active   46m
 ```
 
+```text
+For this lab we’ve chosen to exclude kube-system and calico-system namespaces, 
+since we don’t want the policy to impact the Kubernetes or Calico control planes. 
+(This is a good best practice which avoids accidentally breaking the control planes, 
+in case you have not already set up appropriate network policies and/or Calico failsafe port rules that allows control plane traffic. 
+
+You can then separately write network policy for each control plane component.)
+As the policy contains no rules, it doesn't actually matter what precedence it has, so we did not specify an order value.  
+
+Omitting the order field on a network policy means it has the lower precedence 
+compared to any Calico network policy which does specify an order, or 
+Kubernetes network policies which have an implicit order of 1000. 
+```
+
 ```yaml
 apiVersion: projectcalico.org/v3
 kind: GlobalNetworkPolicy
 metadata:
   name: default-app-policy
 spec:
-  namespaceSelector: has(projectcalico.org/name) && projectcalico.org/name not in {"kube-system", "kube-node-lease", "calico-system", "kube-public","local-path-storage"}
+  namespaceSelector:  projectcalico.org/name not in {"kube-system", "kube-node-lease", "calico-system", "kube-public","local-path-storage"}
   types:
   - Ingress
   - Egress
 ```
 
 ```bash
-oc apply -f https://raw.githubusercontent.com/marcredhat/kind/main/globalnetpolicy1.yaml
+wget https://raw.githubusercontent.com/marcredhat/kind/main/globalnetpolicy1.yaml
 ```
+
+```bash
+calicoctl apply -f globalnetpolicy1.yaml
+Successfully applied 1 'GlobalNetworkPolicy' resource(s)
+```
+
+
+## Verify default deny is in place
+
+```text
+So far we only defined network policy for the Database. 
+The rest of our pods should now be hitting default deny (for both ingress and egress) since 
+there's no policy defined to say who they are allowed to talk to.
+
+Let's try to see if basic connectivity works, e.g. DNS.
+It should fail, timing out after around 15s, because we've not written any policy to say DNS (or any other egress) is allowed.
+```
+
+```bash
+kubectl exec -ti $CUSTOMER_POD -n yaobank -c customer -- /bin/bash
+root@customer-68d67b588d-dk5p7:/app# dig www.google.com
+```
+
+
 
 
