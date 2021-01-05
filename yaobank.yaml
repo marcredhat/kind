@@ -167,6 +167,6 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-      nodeSelector:
+      #nodeSelector:
         #kubernetes.io/hostname: node1
 ---
