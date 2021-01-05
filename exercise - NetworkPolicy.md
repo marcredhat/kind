@@ -24,3 +24,16 @@ From within the customer pod, we will now attempt to access the database directl
 
 curl http://database:2379/v2/keys?recursive=true | python -m json.tool
 ```
+
+## NetworkPolicy
+
+```bash
+oc apply -f https://raw.githubusercontent.com/marcredhat/kind/main/netpolicy1.yaml
+
+curl http://database:2379/v2/keys?recursive=true | python -m json.tool
+
+root@customer-68d67b588d-dk5p7:/app# curl http://database:2379/v2/keys?recursive=true | python -m json.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0
+```  
