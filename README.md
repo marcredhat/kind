@@ -151,6 +151,7 @@ deployment.apps/nginx-ingress-controller created
 limitrange/ingress-nginx created
 ```
 
+
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.0/deploy/static/provider/baremetal/service-nodeport.yaml
 ```
@@ -229,6 +230,8 @@ Expected result:
 service/nginx-web exposed
 ```
 
+## Exercise 1 - Ingress
+
 ```bash
 oc apply -f nginx-ingress.yaml
 ```
@@ -249,6 +252,12 @@ Hello, world!
 Version: 1.0.0
 Hostname: nginx-web-7675865c58-8kf2n
 ```
+
+
+## Exercise 2 - StatefulSet 
+
+https://github.com/marcredhat/kind/blob/main/exercise1.md
+
 
 ## Storage
 
