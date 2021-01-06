@@ -264,6 +264,12 @@ https://github.com/marcredhat/kind/blob/main/exercise1.md
 https://github.com/marcredhat/kind/blob/main/vaulttls.md
 
 
+
+## Exercise 4 - Network Policies
+
+https://github.com/marcredhat/kind/blob/main/exercise%20-%20NetworkPolicy.md
+
+
 ## Storage
 
 See https://mauilion.dev/posts/kind-pvc/
