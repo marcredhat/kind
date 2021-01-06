@@ -191,3 +191,106 @@ Cluster Name    vault-cluster-c3297237
 Cluster ID      7b9ab370-2725-990e-f071-2063543f8468
 HA Enabled      false
 ```
+
+```bash
+oc apply -f https://raw.githubusercontent.com/marcredhat/kind/main/service-account-webapp.yaml
+serviceaccount/webapp created
+```
+
+
+```bash
+oc get sa
+NAME                        SECRETS   AGE
+default                     1         3h10m
+marcvault2                  1         31m
+marcvault2-agent-injector   1         31m
+webapp                      1         171m
+```
+
+
+oc get sa -n vault
+NAME                        SECRETS   AGE
+default                     1         3h20m
+marcvault2                  1         41m
+marcvault2-agent-injector   1         41m
+webapp                      1         3h2m
+
+
+kubectl create namespace app-ns
+namespace/app-ns created
+
+kubectl create serviceaccount app-auth
+serviceaccount/app-auth created
+
+
+oc exec -it marcvault2-0 -- /bin/sh
+/ # export VAULT_ADDR='http://127.0.0.1:8200'
+
+tee /tmp/app-ro-pol.hcl <<EOF
+# As we are working with KV v2
+path "kv/data/secret/app/*" {
+    capabilities = ["read", "list", "create", "update"]
+}
+EOF
+
+/ $ vault login
+Token (will be hidden):
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.ofgWKTxmpa5YITwcIhRRGgPO
+token_accessor       yFCVSVDhcVcTrTpzXh8XAUxN
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]
+
+/ $ vault policy write app-ro-pol /tmp/app-ro-pol.hcl
+Success! Uploaded policy: app-ro-pol
+
+vault kv put kv/data/secret/app/config username='heisenberg' password='urdamnright' ttl='30s'
+
+
+
+
+
+
+
+
+
+oc exec -it marcvault2-0 -- /bin/sh
+/ # export VAULT_ADDR='http://127.0.0.1:8200'
+/ # vault kv put secret/webapp/config username="static-user" password="static-password" 
+
+
+/ # vault kv get secret/webapp/config
+====== Metadata ======
+Key              Value
+---              -----
+created_time     2020-12-30T13:08:09.641527354Z
+deletion_time    n/a
+destroyed        false
+version          1
+
+====== Data ======
+Key         Value
+---         -----
+password    static-password
+username    static-user
+/ # vault policy write webapp - <<EOF
+> path "secret/data/webapp/config" {
+>   capabilities = ["read"]
+> }
+> EOF
+Success! Uploaded policy: webapp
+/ # vault write auth/kubernetes/role/webapp \
+>     bound_service_account_names=webapp \
+>     bound_service_account_namespaces=default \
+>     policies=webapp \
+>     ttl=24h
+Success! Data written to: auth/kubernetes/role/webapp
+oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/vault-deployement-webapp.yaml deployment.apps/webapp created
