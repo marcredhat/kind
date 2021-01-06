@@ -385,7 +385,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app
-  namespace: app-ns
+  namespace: vault
   labels:
     app: vault-agent-demo
 spec:
@@ -415,6 +415,31 @@ Next, let’s launch our example application and create the service account.
 
 We can also verify there are no secrets mounted at /vault/secrets.
 
+
+oc get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+app-98cdf8f99-zpx8p      1/1     Running   0          4m42s
+webapp-8cff8b6d8-9pfb8   1/1     Running   0          6m21s
+[root@marcrhel82 vault-helm]# kubectl exec -ti app-98cdf8f99-zpx8p -c app -- ls -l /vault/secrets
+ls: /vault/secrets: No such file or directory
+
+
+cat <<EOF >> patch-app.yaml
+# patch-basic-annotations.yaml
+spec:
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/ca-cert: "/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+        vault.hashicorp.com/agent-inject-secret-app-config: "kv/data/secret/app/config"
+        vault.hashicorp.com/role: "app"
+EOF
+  
+
+kubectl patch deployment app --patch "$(cat patch-app.yaml)"
+deployment.apps/app patched
 
 
 
