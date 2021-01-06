@@ -1,5 +1,5 @@
 
-
+https://learn.hashicorp.com/tutorials/vault/kubernetes-openshift?in=vault/kubernetes
 https://github.com/openlab-red/hashicorp-vault-for-openshift
 
 
@@ -89,4 +89,28 @@ Key         Value
 password    static-password
 username    static-user
 ```
+
+```bash
+/ # vault policy write webapp - <<EOF
+> path "secret/data/webapp/config" {
+>   capabilities = ["read"]
+> }
+> EOF
+Success! Uploaded policy: webapp
+```
+
+```bash
+/ # vault write auth/kubernetes/role/webapp \
+>     bound_service_account_names=webapp \
+>     bound_service_account_namespaces=default \
+>     policies=webapp \
+>     ttl=24h
+Success! Data written to: auth/kubernetes/role/webapp
+```
+
+oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/vault-deployement-webapp.yaml
+deployment.apps/webapp created
+
+
+
 
