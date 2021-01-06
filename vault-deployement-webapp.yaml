@@ -18,7 +18,7 @@
         serviceAccountName: app-auth
         containers:
         - name: app
-          image: gcr.io/google-samples/hello-app:1.0
+          image: burtlo/exampleapp-ruby:k8s
           imagePullPolicy: Always
           env:
           - name: VAULT_ADDR
