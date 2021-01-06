@@ -207,32 +207,31 @@ marcvault2-agent-injector   1         31m
 webapp                      1         171m
 ```
 
-
-oc get sa -n vault
-NAME                        SECRETS   AGE
-default                     1         3h20m
-marcvault2                  1         41m
-marcvault2-agent-injector   1         41m
-webapp                      1         3h2m
-
-
+```bash
 kubectl create namespace app-ns
 namespace/app-ns created
+```
 
+```bash
 kubectl create serviceaccount app-auth
 serviceaccount/app-auth created
+```
 
-
+```bash
 oc exec -it marcvault2-0 -- /bin/sh
 / # export VAULT_ADDR='http://127.0.0.1:8200'
+```
 
+```bash
 tee /tmp/app-ro-pol.hcl <<EOF
 # As we are working with KV v2
 path "kv/data/secret/app/*" {
     capabilities = ["read", "list", "create", "update"]
 }
 EOF
+```
 
+```bash
 / $ vault login
 Token (will be hidden):
 Success! You are now authenticated. The token information displayed below
@@ -248,12 +247,36 @@ token_renewable      false
 token_policies       ["root"]
 identity_policies    []
 policies             ["root"]
+```
 
+```bash
 / $ vault policy write app-ro-pol /tmp/app-ro-pol.hcl
 Success! Uploaded policy: app-ro-pol
+```
+
+```bash
+/ $ vault secrets enable -path=kv kv
+Success! Enabled the kv secrets engine at: kv/
+```
+
+```bash
+/ $ vault secrets list -detailed
+Path          Plugin       Accessor              Default TTL    Max TTL    Force No Cache    Replication    Seal Wrap    External Entropy Access    Options    Description                                                UUID
+----          ------       --------              -----------    -------    --------------    -----------    ---------    -----------------------    -------    -----------                                                ----
+cubbyhole/    cubbyhole    cubbyhole_261e961b    n/a            n/a        false             local          false        false                      map[]      per-token private secret storage                           fe639c60-0cbb-f11d-921d-bc3d2ba86b29
+identity/     identity     identity_2cdd5ee1     system         system     false             replicated     false        false                      map[]      identity store                                             b8770c0b-b108-390c-9bef-c3d8d8ab8ffe
+kv/           kv           kv_55b01e47           system         system     false             replicated     false        false                      map[]      n/a                                                        a1d1d0de-3a01-369a-7890-43f5e70dbe93
+sys/          system       system_72804ea9       n/a            n/a        false             replicated     false        false                      map[]      system endpoints used for control, policy and debugging    d1b1ded7-3278-f7b8-9400-6d3c965fc9b8
+```
+
 
 vault kv put kv/data/secret/app/config username='heisenberg' password='urdamnright' ttl='30s'
 
+
+```bash
+/ $ vault kv put kv/data/secret/app/config username='heisenberg' password='urdamnright' ttl='30s'
+Success! Data written to: kv/data/secret/app/config
+```bash
 
 
 
