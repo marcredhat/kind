@@ -369,44 +369,57 @@ vault write auth/kubernetes/role/app \
 Success! Data written to: auth/kubernetes/role/app
 ```
 
+```bash
 kubectl config set-context --current --namespace=app-ns
+```
 
-kubectl run --generator=run-pod/v1 tmp --rm -i --tty --serviceaccount=app-auth --image gcr.io/google-samples/hello-app:1.0
+```bash
+kubectl create serviceaccount app-auth
+serviceaccount/app-auth created
+```
+
+```bash
+cat <<EOF >> app.yaml
+# app.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: app-ns
+  labels:
+    app: vault-agent-demo
+spec:
+  selector:
+    matchLabels:
+      app: vault-agent-demo
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: vault-agent-demo
+    spec:
+      serviceAccountName: app-auth
+      containers:
+      - name: app
+        image: jweissig/app:0.0.1
+EOF
+```
+
+```bash
+kubectl create -f app.yaml
+deployment.apps/app created
+```
+
+Next, let’s launch our example application and create the service account. 
+
+We can also verify there are no secrets mounted at /vault/secrets.
 
 
 
 
 
 
-oc exec -it marcvault2-0 -- /bin/sh
-/ # export VAULT_ADDR='http://127.0.0.1:8200'
-/ # vault kv put secret/webapp/config username="static-user" password="static-password" 
 
 
-/ # vault kv get secret/webapp/config
-====== Metadata ======
-Key              Value
----              -----
-created_time     2020-12-30T13:08:09.641527354Z
-deletion_time    n/a
-destroyed        false
-version          1
 
-====== Data ======
-Key         Value
----         -----
-password    static-password
-username    static-user
-/ # vault policy write webapp - <<EOF
-> path "secret/data/webapp/config" {
->   capabilities = ["read"]
-> }
-> EOF
-Success! Uploaded policy: webapp
-/ # vault write auth/kubernetes/role/webapp \
->     bound_service_account_names=webapp \
->     bound_service_account_namespaces=default \
->     policies=webapp \
->     ttl=24h
-Success! Data written to: auth/kubernetes/role/webapp
-oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/vault-deployement-webapp.yaml deployment.apps/webapp created
