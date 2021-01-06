@@ -259,6 +259,11 @@ Hostname: nginx-web-7675865c58-8kf2n
 https://github.com/marcredhat/kind/blob/main/exercise1.md
 
 
+## Exercise 3 - Helm and Vault
+
+https://github.com/marcredhat/kind/blob/main/vaulttls.md
+
+
 ## Storage
 
 See https://mauilion.dev/posts/kind-pvc/
