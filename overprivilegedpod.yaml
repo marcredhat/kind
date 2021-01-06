@@ -5,8 +5,8 @@ metadata:
 spec:
    serviceAccountName: overprivilegedsa
    containers:
-   - name: busybox
-     image: busybox
+   - name: hello-app
+     image: gcr.io/google-samples/hello-app:1.0
      args:
      - sleep
      - "1000000"
