@@ -46,3 +46,47 @@ oc exec -it vault-0 -- /bin/sh
 Success! Data written to: auth/kubernetes/config
 ```
 
+```bash
+oc create -f https://raw.githubusercontent.com/marcredhat/kind/main/service-account-webapp.yaml
+serviceaccount/webapp created
+
+oc get sa
+NAME                   SECRETS   AGE
+default                1         18m
+vault                  1         15m
+vault-agent-injector   1         15m
+webapp                 1         7s
+```
+
+
+```bash
+oc exec -it vault-0 -- /bin/sh
+/ # vault kv put secret/webapp/config username="static-user" \
+>     password="static-password"
+Key              Value
+---              -----
+created_time     2020-12-30T13:08:09.641527354Z
+deletion_time    n/a
+destroyed        false
+version          1
+/ #
+```
+
+
+```bash
+/ # vault kv get secret/webapp/config
+====== Metadata ======
+Key              Value
+---              -----
+created_time     2020-12-30T13:08:09.641527354Z
+deletion_time    n/a
+destroyed        false
+version          1
+
+====== Data ======
+Key         Value
+---         -----
+password    static-password
+username    static-user
+```
+
