@@ -1,11 +1,15 @@
-
+```bash
 SERVICE=vault-agent-injector-svc
 NAMESPACE=vault
 SECRET_NAME=vault-agent-injector-tls
 TMPDIR=/tmp
+```
 
+```bash
 openssl genrsa -out ${TMPDIR}/vault-injector.key 2048
+```
 
+```bash
 cat <<EOF >${TMPDIR}/csr-vault-agent-injector.conf
 [req]
 req_extensions = v3_req
@@ -23,10 +27,17 @@ DNS.3 = ${SERVICE}.${NAMESPACE}.svc
 DNS.4 = ${SERVICE}.${NAMESPACE}.svc.cluster.local
 IP.1 = 127.0.0.1
 EOF
+```
 
+```bash
 openssl req -new -key ${TMPDIR}/vault-injector.key -subj "/CN=${SERVICE}.${NAMESPACE}.svc" -out ${TMPDIR}/server-vault-agent-injector.csr -config ${TMPDIR}/csr-vault-agent-injector.conf
-export CSR_NAME=vault-agent-injector-csr
+```
 
+```bash
+export CSR_NAME=vault-agent-injector-csr
+```
+
+```bash
 cat <<EOF >${TMPDIR}/agent-injector-csr.yaml
 apiVersion: certificates.k8s.io/v1beta1
 kind: CertificateSigningRequest
@@ -41,16 +52,17 @@ spec:
   - key encipherment
   - server auth
 EOF
+```
 
-
-
+```bash
 kubectl create -f ${TMPDIR}/agent-injector-csr.yaml
 certificatesigningrequest.certificates.k8s.io/vault-agent-injector-csr created
+```
 
-
+```bash
 kubectl certificate approve ${CSR_NAME}
 certificatesigningrequest.certificates.k8s.io/vault-agent-injector-csr approved
-
+```
 
 
 serverCert=$(kubectl get csr ${CSR_NAME} -o jsonpath='{.status.certificate}')
