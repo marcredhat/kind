@@ -169,3 +169,25 @@ Version            1.6.1
 Storage Type       file
 HA Enabled         false
 ```
+
+```text
+Note aboce that Unseal progress is 1/3
+
+We need to repeat the unseal process with 2 other keys
+...
+
+vault operator unseal --address http://10.240.207.171:8200
+Unseal Key (will be hidden):
+Key             Value
+---             -----
+Seal Type       shamir
+Initialized     true
+Sealed          false
+Total Shares    5
+Threshold       3
+Version         1.6.1
+Storage Type    file
+Cluster Name    vault-cluster-c3297237
+Cluster ID      7b9ab370-2725-990e-f071-2063543f8468
+HA Enabled      false
+```
