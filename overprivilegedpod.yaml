@@ -1,13 +1,18 @@
+---
 apiVersion: v1
 kind: Pod
 metadata:
-   name: overprivilegedpod
-   namespace: vault
+  name: overprivilegedpod
+  namespace: vault
 spec:
-   serviceAccountName: overprivilegedsa
-   containers:
-   - name: busybox
-     image: busybox
-     args:
-     - sleep
-     - "1000000"
+  serviceAccountName: overprivilegedsa
+  containers:
+    - command:
+        - sleep
+        - "3600"
+      image: busybox
+      args:
+      - sleep
+      - "1000000"
+      name: busybox
+
