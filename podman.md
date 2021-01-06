@@ -2,11 +2,11 @@
 
 https://www.redhat.com/sysadmin/behind-scenes-podman
 
-
+```bash
 podman login registry.redhat.io --username <email address you registered for the free developer account>
 Password:
 Login Succeeded!
-
+```
 
 ```bash
 mkdir containers
