@@ -1,13 +1,20 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1
+# You need to already have a Role named "pod-reader" in that namespace.
 kind: RoleBinding
 metadata:
-   name: read-pods
-   namespace: vault
+  name: read-pods
+  namespace: vault
 subjects:
-- kind: ServiceAccount
-   name: overprivilegedsa 
-   namespace: vault
+  # You can specify more than one "subject"
+  - kind: ServiceAccount
+    name: overprivilegedsa   
+    apiGroup: rbac.authorization.k8s.io
+    namespace: vault
 roleRef:
-   kind: Role 
-   name: pod-reader 
-   apiGroup: rbac.authorization.k8s.io
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role  # this must be Role or ClusterRole
+  # this must match the name of the Role or ClusterRole you wish to bind to
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+
