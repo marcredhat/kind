@@ -15,15 +15,15 @@
         labels:
           app: webapp
       spec:
-        serviceAccountName: webapp
+        serviceAccountName: app-auth
         containers:
         - name: app
           image: gcr.io/google-samples/hello-app:1.0
           imagePullPolicy: Always
           env:
           - name: VAULT_ADDR
-            value: "http://vault:8200"
-          - name: JWT_PATH
-            value: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+            value: "http://10.101.176.73:8200"
+          #- name: JWT_PATH
+          #  value: "/var/run/secrets/kubernetes.io/serviceaccount/token"
           - name: SERVICE_PORT
             value: "8080"
