@@ -11,7 +11,4 @@ spec:
         - sleep
         - "3600"
       image: busybox
-      args:
-      - sleep
-      - "1000000"
-      name: busybox
+      name: pods-simple-container
