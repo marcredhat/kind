@@ -1,3 +1,7 @@
+
+https://cogarius.medium.com/a-vault-for-all-your-secrets-full-tls-on-kubernetes-with-kv-v2-c0ecd42853e1
+
+
 ```bash
 SERVICE=vault-agent-injector-svc
 NAMESPACE=vault
@@ -64,7 +68,7 @@ kubectl certificate approve ${CSR_NAME}
 certificatesigningrequest.certificates.k8s.io/vault-agent-injector-csr approved
 ```
 
-
+```bash
 serverCert=$(kubectl get csr ${CSR_NAME} -o jsonpath='{.status.certificate}')
 
 echo "${serverCert}" | openssl base64 -d -A -out ${TMPDIR}/vault-injector.crt
@@ -78,6 +82,11 @@ kubectl create secret generic ${SECRET_NAME} \
         --from-file=vault-injector.key=${TMPDIR}/vault-injector.key \
         --from-file=vault-injector.crt=${TMPDIR}/vault-injector.crt \
         --from-file=vault-injector.ca=${TMPDIR}/vault-injector.ca
+        
+secret/vault-agent-injector-tls created       
 
 git clone https://github.com/hashicorp/vault-helm.git
 Inside the values.yaml file you need to set tlsDisable variable to false to enable TLS. Note that all the configuration of the chart is detailed here
+```
+
+[root@marcrhel82 vault-helm]# helm install marcvault2 .
