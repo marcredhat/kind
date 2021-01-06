@@ -232,6 +232,14 @@ EOF
 ```
 
 ```bash
+cat  /tmp/app-ro-pol.hcl
+# As we are working with KV v2
+path "kv/data/secret/app/*" {
+    capabilities = ["read", "list", "create", "update"]
+}
+```
+
+```bash
 / $ vault login
 Token (will be hidden):
 Success! You are now authenticated. The token information displayed below
