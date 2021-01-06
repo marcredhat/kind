@@ -21,7 +21,7 @@ Context "kind-marcccluster01" modified.
 ```bash
 helm repo add hashicorp https://helm.releases.hashicorp.com --insecure-skip-tls-verify
 helm repo update
-helm install vault hashicorp/vault --set "global.openshift=true" --set "server.dev.enabled=true" --insecure-skip-tls-verify
+helm install vault hashicorp/vault --set "dev-listen-address=0.0.0.0:8200" --set "global.openshift=true" --set "server.dev.enabled=true" --insecure-skip-tls-verify
 
 ```
 
