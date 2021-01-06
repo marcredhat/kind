@@ -3,9 +3,6 @@ global:
   openshift: true
 
 server:
-  route:
-    enabled: true
-    host: vault
   standalone:
     enabled: true
     config: |
