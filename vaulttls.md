@@ -284,9 +284,94 @@ vault kv put kv/data/secret/app/config username='heisenberg' password='urdamnrig
 ```bash
 / $ vault kv put kv/data/secret/app/config username='heisenberg' password='urdamnright' ttl='30s'
 Success! Data written to: kv/data/secret/app/config
+```
+
+
+## Get a token linked to the policy
+
 ```bash
+/ $ vault token create -policy=app-ro-pol
+Key                  Value
+---                  -----
+token                s.yVvAJcmZwqhCNOTNFHNAdCiJ
+token_accessor       aD06yJzC0gT1eear8ypsu5pH
+token_duration       768h
+token_renewable      true
+token_policies       ["app-ro-pol" "default"]
+identity_policies    []
+policies             ["app-ro-pol" "default"]
+```
+
+## Login with the above token
+
+```bash
+/ $ vault login
+Token (will be hidden):
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.yVvAJcmZwqhCNOTNFHNAdCiJ
+token_accessor       aD06yJzC0gT1eear8ypsu5pH
+token_duration       767h58m48s
+token_renewable      true
+token_policies       ["app-ro-pol" "default"]
+identity_policies    []
+policies             ["app-ro-pol" "default"]
+```
 
 
+## Test if we can access our secret 
+
+
+```bash
+/ $ vault kv get kv/data/secret/app/config
+====== Data ======
+Key         Value
+---         -----
+password    urdamnright
+ttl         30s
+username    heisenberg
+```
+
+## Configure Kubernetes auth method
+
+Login with the Initial Root Token
+
+```bash
+vault login
+
+/ $ vault auth enable kubernetes
+Success! Enabled kubernetes auth method at: kubernetes/
+```
+
+```bash
+/ $ export KUBERNETES_TCP_ADDR="10.0.2.15:6443"
+
+/ $ vault write auth/kubernetes/config \
+>     token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+>     kubernetes_host=${KUBERNETES_TCP_ADDR} \
+>  kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+Success! Data written to: auth/kubernetes/config
+```
+
+## Create a role named, 'app' to map our app's Kubernetes Service Account to Vault policies and default token TTL
+
+```bash
+vault write auth/kubernetes/role/app \
+        bound_service_account_names=app-auth \
+        bound_service_account_namespaces=app-ns \
+        policies=app-ro-pol \
+        ttl=24h
+        
+Success! Data written to: auth/kubernetes/role/app
+```
+
+kubectl config set-context --current --namespace=app-ns
+
+kubectl run --generator=run-pod/v1 tmp --rm -i --tty --serviceaccount=app-auth --image gcr.io/google-samples/hello-app:1.0
 
 
 
