@@ -272,6 +272,10 @@ https://github.com/marcredhat/kind/blob/main/exercise%20-%20NetworkPolicy.md
 
 ## Storage
 
+```bash
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+```
+
 See https://mauilion.dev/posts/kind-pvc/
 
 ```text
