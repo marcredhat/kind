@@ -35,6 +35,9 @@ dnf -y install jq
 Package jq-1.5-12.el8.x86_64 is already installed.
 ```
 
+```
+sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+```
 
 ```bash
 sudo yum -y install docker-ce --allowerasing
